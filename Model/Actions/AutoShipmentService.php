@@ -123,6 +123,10 @@ class AutoShipmentService
                 'number' => $this->getTrackingNumber($order),
             ];
 
+            if($this->getTrackingNumber($order) || empty($this->getTrackingNumber($order))){
+                return null;
+            }
+
             $shipment->getOrder()->setIsInProcess(true);
 
             $track = $this->trackFactory->create()
