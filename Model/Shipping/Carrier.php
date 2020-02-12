@@ -123,6 +123,11 @@ class Carrier extends AbstractCarrier implements CarrierInterface
         $quote = $this->storage->getRateByCurrentQuote(
             $this->checkoutSession->getQuote()->getId()
         );
+        
+        if (!$quote) {
+            return $methods;
+        }
+        
         $rates = unserialize($quote->getContent());
 
         foreach ($rates as $rate) {
