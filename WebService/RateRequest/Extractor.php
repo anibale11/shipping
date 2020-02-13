@@ -69,6 +69,7 @@ class Extractor
             'origin'        => $this->getShippingOrigin(),
             'destination'   => $this->getShippingDestination(),
             'items'         => $this->getItems(),
+            'source'        => $this->getSource(),
         ];
     }
 
@@ -80,10 +81,24 @@ class Extractor
         return '#' . uniqid();
     }
 
+    /**
+     * Get Currency
+     */
     public function getCurrency()
     {
         return $this->storeManager->getStore()
-            ->getCurrentCurrency()->getCode();
+            ->getCurrentCurrency()
+            ->getCode();
+    }
+
+    /**
+     * Get Source
+     */
+    public function getSource()
+    {
+        $street = $this->getQuote()->getShippingAddress()->getStreet()[0];
+
+        return empty($street) ? 'cart' : 'checkout';
     }
     /**
      * Normalize rate request items. In rare cases they are not set at all.
@@ -164,6 +179,7 @@ class Extractor
             'references_1' => null,
             'references_2' => null,
             'notes' => null,
+            'country' => $this->getQuote()->getShippingAddress()->getCountry()
         ];
     }
 }
